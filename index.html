@@ -8,17 +8,17 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #000;
+            background-color: #111;
             color: white;
             margin: 0;
             padding: 0;
         }
         h1 {
-            background: #ffcc00;
+            background: #f39c12;
             padding: 20px;
             margin: 0;
             font-size: 36px;
-            color: black;
+            color: white;
         }
         .menu {
             display: flex;
@@ -27,20 +27,26 @@
             margin-top: 20px;
         }
         .menu-item {
-            margin: 10px;
+            margin: 15px;
             padding: 20px;
-            width: 200px;
-            background-color: #333;
+            width: 250px;
+            background-color: #f39c12;
             color: white;
             font-size: 18px;
             border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
-            transition: all 0.3s;
-            margin-bottom: 15px;
+            transition: all 0.3s ease-in-out;
+            position: relative;
         }
         .menu-item:hover {
-            background: #ffcc00;
+            background-color: #e67e22;
             transform: scale(1.1);
+        }
+        .menu-item:active {
+            background-color: #d35400;
         }
         .section {
             display: none;
@@ -48,7 +54,7 @@
             border-radius: 10px;
             background: #333;
             margin: 20px;
-            transition: all 0.3s;
+            transition: all 0.3s ease-in-out;
         }
         .active {
             display: block;
@@ -58,22 +64,55 @@
             color: black;
         }
         .light-theme h1 {
-            background: #ffcc00;
+            background: #f39c12;
         }
-        .leaderboard {
+        .button {
+            background-color: #f39c12;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+        .button:hover {
+            background-color: #e67e22;
+        }
+        .fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            z-index: 1000;
+        }
+        .fullscreen.active {
+            display: flex;
+        }
+        #score {
+            font-size: 20px;
             margin-top: 20px;
-            background: #222;
-            padding: 20px;
-            border-radius: 10px;
         }
-        .leaderboard ul {
-            list-style-type: none;
-            padding: 0;
+        .share-buttons {
+            margin-top: 20px;
         }
-        .leaderboard li {
-            padding: 5px;
-            font-size: 18px;
-            color: #ffcc00;
+        .share-button {
+            margin: 0 10px;
+            padding: 10px;
+            background-color: #e67e22;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .share-button:hover {
+            background-color: #d35400;
         }
     </style>
 </head>
@@ -92,106 +131,69 @@
         </div>
         <!-- Truth or Lie -->
         <div class="menu-item" onclick="showSection('truth-lie')">
-            Truth or Lie? 🕵️
+            Truth or Lie 🕵️
         </div>
         <!-- Text to Speech -->
         <div class="menu-item" onclick="showSection('text-to-speech')">
-            Text-to-Speech 🔊
+            Text to Speech 🔊
         </div>
         <!-- Fortune Teller -->
         <div class="menu-item" onclick="showSection('fortune-teller')">
             Fortune Teller 🔮
         </div>
-        <!-- Excuse Generator -->
-        <div class="menu-item" onclick="showSection('excuse-generator')">
-            Excuse Generator 😂
-        </div>
-        <!-- New Game - Guess the Number -->
-        <div class="menu-item" onclick="showSection('guess-the-number')">
-            Guess the Number 🔢
-        </div>
     </div>
 
-    <!-- Sections for the games -->
+    <!-- Fullscreen Game View -->
+    <div id="fullScreen" class="fullscreen">
+        <button onclick="closeFullScreen()" class="button">Close</button>
+        <div id="gameContent">Game goes here...</div>
+    </div>
+
+    <!-- Random Fun Section -->
     <div id="random-fun" class="section">
         <h2>Random Fun 🎲</h2>
-        <button onclick="generateRandomFun()">Get a Challenge</button>
+        <button onclick="generateRandomFun()" class="button">Get a Challenge</button>
         <p id="randomResult"></p>
     </div>
 
+    <!-- Click Speed Section -->
     <div id="click-speed" class="section">
         <h2>Click Speed Test ⚡</h2>
         <p>Click as fast as you can in 5 seconds!</p>
-        <button onclick="startClickTest()">Start</button>
+        <button onclick="startClickTest()" class="button">Start</button>
         <p id="clickCount">Clicks: 0</p>
         <p id="highScore">Best Score: 0</p>
     </div>
 
-    <div id="truth-lie" class="section">
-        <h2>Truth or Lie? 🕵️</h2>
-        <button onclick="startTruthLieGame()">Start</button>
-        <p id="truthLieResult"></p>
-    </div>
-
-    <div id="text-to-speech" class="section">
-        <h2>Text-to-Speech 🔊</h2>
-        <input type="text" id="speechText" placeholder="Type something...">
-        <button onclick="convertTextToSpeech()">Speak</button>
-    </div>
-
-    <div id="fortune-teller" class="section">
-        <h2>Fortune Teller 🔮</h2>
-        <button onclick="tellFortune()">Tell Your Fortune</button>
-        <p id="fortuneResult"></p>
-    </div>
-
-    <div id="excuse-generator" class="section">
-        <h2>Excuse Generator 😂</h2>
-        <button onclick="generateExcuse()">Generate Excuse</button>
-        <p id="excuseResult"></p>
-    </div>
-
-    <!-- New Game - Guess the Number -->
-    <div id="guess-the-number" class="section">
-        <h2>Guess the Number 🔢</h2>
-        <p>Guess the number between 1 and 100:</p>
-        <input type="number" id="userGuess" placeholder="Enter your guess">
-        <button onclick="guessNumber()">Guess</button>
-        <p id="guessResult"></p>
-    </div>
-
-    <!-- Leaderboard -->
-    <div class="leaderboard">
-        <h3>Leaderboard</h3>
-        <ul id="leaderboardList">
-            <li>John Doe - 500 points</li>
-            <li>Jane Smith - 450 points</li>
-            <li>Mark Lee - 400 points</li>
-        </ul>
+    <!-- Share Section -->
+    <div class="share-buttons">
+        <a href="#" class="share-button">Share on Facebook</a>
+        <a href="#" class="share-button">Share on Twitter</a>
     </div>
 
     <script>
-        // Variables for the leaderboard
-        let leaderboard = [
-            { name: "John Doe", score: 500 },
-            { name: "Jane Smith", score: 450 },
-            { name: "Mark Lee", score: 400 }
-        ];
+        let highScore = 0;
 
-        // Show section
         function showSection(sectionId) {
             let sections = document.querySelectorAll(".section");
             sections.forEach(section => section.classList.remove("active"));
             document.getElementById(sectionId).classList.add("active");
         }
 
-        // Random Fun Challenge
+        function openFullScreen(content) {
+            document.getElementById("gameContent").innerText = content;
+            document.getElementById("fullScreen").classList.add("active");
+        }
+
+        function closeFullScreen() {
+            document.getElementById("fullScreen").classList.remove("active");
+        }
+
         function generateRandomFun() {
             let challenges = ["Sing a song 🎤", "Do 10 push-ups 💪", "Dance for 30 seconds 💃"];
             document.getElementById("randomResult").innerText = challenges[Math.floor(Math.random() * challenges.length)];
         }
 
-        // Click Speed Test
         function startClickTest() {
             let clickCount = 0;
             document.getElementById("clickCount").innerText = "Clicks: 0";
@@ -206,59 +208,11 @@
             setTimeout(() => {
                 button.onclick = null;
                 alert("Time's up! You clicked " + clickCount + " times.");
-                if (clickCount > parseInt(localStorage.getItem('highScore') || 0)) {
-                    localStorage.setItem('highScore', clickCount);
-                    document.getElementById("highScore").innerText = "Best Score: " + clickCount;
+                if (clickCount > highScore) {
+                    highScore = clickCount;
+                    document.getElementById("highScore").innerText = "Best Score: " + highScore;
                 }
             }, 5000);
-        }
-
-        // Truth or Lie
-        function startTruthLieGame() {
-            let statements = [
-                { statement: "The Earth is flat.", isTrue: false },
-                { statement: "The sun rises in the east.", isTrue: true },
-                { statement: "Humans can breathe underwater.", isTrue: false }
-            ];
-            let randomStatement = statements[Math.floor(Math.random() * statements.length)];
-            let userAnswer = confirm(randomStatement.statement);
-            document.getElementById("truthLieResult").innerText = 
-                (userAnswer === randomStatement.isTrue) ? "Correct!" : "Wrong! Try again.";
-        }
-
-        // Text-to-Speech
-        function convertTextToSpeech() {
-            let text = document.getElementById("speechText").value;
-            let utterance = new SpeechSynthesisUtterance(text);
-            speechSynthesis.speak(utterance);
-        }
-
-        // Fortune Teller
-        function tellFortune() {
-            let fortunes = [
-                "You will find happiness in unexpected places.",
-                "An exciting opportunity is coming your way.",
-                "Success is in your future, but hard work is required."
-            ];
-            document.getElementById("fortuneResult").innerText = fortunes[Math.floor(Math.random() * fortunes.length)];
-        }
-
-        // Excuse Generator
-        function generateExcuse() {
-            let excuses = [
-                "I missed the bus!",
-                "I wasn't feeling well.",
-                "I lost track of time."
-            ];
-            document.getElementById("excuseResult").innerText = excuses[Math.floor(Math.random() * excuses.length)];
-        }
-
-        // Guess the Number Game
-        function guessNumber() {
-            let userGuess = parseInt(document.getElementById("userGuess").value);
-            let correctNumber = Math.floor(Math.random() * 100) + 1;
-            let resultText = (userGuess === correctNumber) ? "Correct! You guessed the number." : "Wrong guess! Try again.";
-            document.getElementById("guessResult").innerText = resultText;
         }
     </script>
 
