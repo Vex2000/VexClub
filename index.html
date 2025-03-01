@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VexClub - Fun Hub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #1e1e2e;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            background: #ff007f;
+            padding: 20px;
+            margin: 0;
+        }
+        .menu {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .menu button {
+            margin: 5px;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            background: #6200ea;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        .menu button:hover {
+            background: #3700b3;
+        }
+        .section {
+            display: none;
+            padding: 20px;
+            border-radius: 10px;
+            background: #333;
+            margin: 20px;
+        }
+        .active {
+            display: block;
+        }
+        #randomResult {
+            font-size: 20px;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #ffcc00;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome to VexClub 🎉</h1>
+
+    <div class="menu">
+        <button onclick="showSection('random-fun')">🎲 Random Fun</button>
+        <button onclick="showSection('click-speed')">⚡ Click Speed</button>
+        <button onclick="showSection('truth-lie')">🕵️ Truth Detector</button>
+        <button onclick="showSection('text-to-speech')">🔊 Text-to-Speech</button>
+        <button onclick="showSection('fortune-teller')">🔮 Fortune Teller</button>
+        <button onclick="showSection('excuse-generator')">😂 Excuse Generator</button>
+    </div>
+
+    <!-- Random Fun Section -->
+    <div id="random-fun" class="section">
+        <h2>Random Fun 🎲</h2>
+        <p>Click the button to get a random challenge!</p>
+        <button onclick="generateRandomFun()">Get a Challenge</button>
+        <p id="randomResult"></p>
+    </div>
+
+    <!-- Click Speed Section -->
+    <div id="click-speed" class="section">
+        <h2>Click Speed Test ⚡</h2>
+        <p>Click as fast as you can in 5 seconds!</p>
+        <button onclick="startClickTest()">Start</button>
+        <p id="clickCount">Clicks: 0</p>
+    </div>
+
+    <!-- Truth or Lie Detector -->
+    <div id="truth-lie" class="section">
+        <h2>Truth or Lie? 🕵️</h2>
+        <p>Type something and we will detect if it's true or false (randomly)!</p>
+        <input type="text" id="truthInput">
+        <button onclick="checkTruth()">Analyze</button>
+        <p id="truthResult"></p>
+    </div>
+
+    <!-- Text-to-Speech -->
+    <div id="text-to-speech" class="section">
+        <h2>Text-to-Speech 🔊</h2>
+        <p>Type something and hear it out loud!</p>
+        <input type="text" id="speechInput">
+        <button onclick="speakText()">Speak</button>
+    </div>
+
+    <!-- Fortune Teller -->
+    <div id="fortune-teller" class="section">
+        <h2>Fortune Teller 🔮</h2>
+        <p>Click the button to reveal your fortune!</p>
+        <button onclick="tellFortune()">Reveal</button>
+        <p id="fortuneResult"></p>
+    </div>
+
+    <!-- Excuse Generator -->
+    <div id="excuse-generator" class="section">
+        <h2>Excuse Generator 😂</h2>
+        <p>Need an excuse? Click below!</p>
+        <button onclick="generateExcuse()">Generate Excuse</button>
+        <p id="excuseResult"></p>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            let sections = document.querySelectorAll(".section");
+            sections.forEach(section => section.classList.remove("active"));
+            document.getElementById(sectionId).classList.add("active");
+        }
+
+        function generateRandomFun() {
+            let challenges = ["Sing a song 🎤", "Do 10 push-ups 💪", "Dance for 30 seconds 💃", "Speak without using 'E' for 1 minute!"];
+            document.getElementById("randomResult").innerText = challenges[Math.floor(Math.random() * challenges.length)];
+        }
+
+        let clickCount = 0;
+        function startClickTest() {
+            clickCount = 0;
+            document.getElementById("clickCount").innerText = "Clicks: 0";
+            let startTime = Date.now();
+            let button = document.querySelector("#click-speed button");
+            button.onclick = () => {
+                if (Date.now() - startTime < 5000) {
+                    clickCount++;
+                    document.getElementById("clickCount").innerText = "Clicks: " + clickCount;
+                }
+            };
+            setTimeout(() => {
+                button.onclick = null;
+                alert("Time's up! You clicked " + clickCount + " times.");
+            }, 5000);
+        }
+
+        function checkTruth() {
+            let responses = ["✅ True!", "❌ Lie detected!"];
+            document.getElementById("truthResult").innerText = responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        function speakText() {
+            let text = document.getElementById("speechInput").value;
+            let speech = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(speech);
+        }
+
+        function tellFortune() {
+            let fortunes = ["Good luck awaits you!", "A surprise is coming your way!", "Be careful today!", "A great opportunity is near!"];
+            document.getElementById("fortuneResult").innerText = fortunes[Math.floor(Math.random() * fortunes.length)];
+        }
+
+        function generateExcuse() {
+            let excuses = ["My dog ate my homework! 🐶", "I was saving the world! 🌍", "My alarm didn't go off! ⏰", "Aliens abducted me! 👽"];
+            document.getElementById("excuseResult").innerText = excuses[Math.floor(Math.random() * excuses.length)];
+        }
+    </script>
+
+</body>
+</html>
