@@ -73,6 +73,12 @@
             font-size: 20px;
             margin-top: 20px;
         }
+        #leaderboard {
+            background-color: #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px;
+        }
     </style>
 </head>
 <body>
@@ -91,6 +97,9 @@
         </div>
         <div class="menu-item" onclick="showSection('rock-paper-scissors')">
             Rock Paper Scissors ✊✋✌️
+        </div>
+        <div class="menu-item" onclick="showSection('leaderboard')">
+            View Leaderboard 🏆
         </div>
     </div>
 
@@ -124,16 +133,33 @@
         <p id="rps-result"></p>
     </div>
 
+    <div id="leaderboard" class="section">
+        <h2>Leaderboard 🏆</h2>
+        <div id="leaderboard-list"></div>
+    </div>
+
     <script>
         const challenges = [
             "Do 20 jumping jacks 💪", 
             "Draw something with your eyes closed 👀", 
             "Write 10 short sentences about summer ☀️", 
             "Run around your house 3 times 🏃", 
-            "Sing a song for 30 seconds 🎤"
+            "Sing a song for 30 seconds 🎤",
+            // More than 100 challenges can be added here...
         ];
+
+        const excuses = [
+            "I lost my keys 🔑", 
+            "My pet was sick 🐶", 
+            "The internet went down 🌐", 
+            "I had a power outage ⚡", 
+            "I accidentally spilled coffee on my laptop ☕",
+            // More than 100 excuses can be added here...
+        ];
+
         let clickCount = 0;
         let highScore = 0;
+        let leaderboard = [];
 
         // Show section based on menu click
         function showSection(sectionId) {
@@ -145,7 +171,17 @@
         // Random Fun Game
         function generateRandomFun() {
             let challenge = challenges[Math.floor(Math.random() * challenges.length)];
-            document.getElementById("randomResult").innerText = challenge;
+            let excuse = excuses[Math.floor(Math.random() * excuses.length)];
+            let randomType = Math.random();
+
+            // 5% chance of repeating the same challenge or excuse
+            if (randomType < 0.05) {
+                let repeated = Math.random() < 0.5 ? challenge : excuse;
+                document.getElementById("randomResult").innerText = `You got a repeat! ${repeated}`;
+            } else {
+                let selected = Math.random() < 0.5 ? challenge : excuse;
+                document.getElementById("randomResult").innerText = selected;
+            }
         }
 
         // Click Speed Game
@@ -166,8 +202,20 @@
                 if (clickCount > highScore) {
                     highScore = clickCount;
                     document.getElementById("highScore").innerText = "Best Score: " + highScore;
+                    leaderboard.push({score: highScore});
+                    leaderboard.sort((a, b) => b.score - a.score); // Sort leaderboard by score
+                    updateLeaderboard();
                 }
             }, 5000);
+        }
+
+        // Update leaderboard
+        function updateLeaderboard() {
+            let leaderboardList = document.getElementById("leaderboard-list");
+            leaderboardList.innerHTML = "";
+            leaderboard.slice(0, 5).forEach((entry, index) => {
+                leaderboardList.innerHTML += `<p>Rank ${index + 1}: ${entry.score} clicks</p>`;
+            });
         }
 
         // Guess the Number Game
