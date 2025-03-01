@@ -146,11 +146,6 @@
         </div>
     </div>
 
-    <div id="fullScreen" class="fullscreen">
-        <button onclick="closeFullScreen()" class="button">Close</button>
-        <div id="gameContent">Game goes here...</div>
-    </div>
-
     <div id="random-fun" class="section">
         <h2>Random Fun 🎲</h2>
         <button onclick="generateRandomFun()" class="button">Get a Challenge</button>
@@ -203,8 +198,20 @@
     </div>
 
     <script>
-        const challenges = ["Do 20 jumping jacks 💪", "Draw something with your eyes closed 👀", "Write 10 short sentences about summer ☀️"];
-        const excuses = ["Sorry, the internet was too slow 🐢", "I was thinking about something important 🧠", "I got stuck in work 🖥️"];
+        const challenges = [
+            "Do 20 jumping jacks 💪", 
+            "Draw something with your eyes closed 👀", 
+            "Write 10 short sentences about summer ☀️", 
+            "Run around your house 3 times 🏃", 
+            "Sing a song for 30 seconds 🎤"
+        ];
+        const excuses = [
+            "Sorry, the internet was too slow 🐢", 
+            "I was thinking about something important 🧠", 
+            "I got stuck in work 🖥️", 
+            "My dog ate my homework 🐕", 
+            "I lost track of time ⏰"
+        ];
         const correctAnswer = "Mars";
 
         function showSection(sectionId) {
@@ -216,6 +223,69 @@
         function generateRandomFun() {
             let challenge = challenges[Math.floor(Math.random() * challenges.length)];
             document.getElementById("randomResult").innerText = challenge;
+        }
+
+        function startClickTest() {
+            let clickCount = 0;
+            document.getElementById("clickCount").innerText = "Clicks: 0";
+            let startTime = Date.now();
+            let button = document.querySelector("#click-speed button");
+            button.onclick = () => {
+                if (Date.now() - startTime < 5000) {
+                    clickCount++;
+                    document.getElementById("clickCount").innerText = "Clicks: " + clickCount;
+                }
+            };
+            setTimeout(() => {
+                button.onclick = null;
+                alert("Time's up! You clicked " + clickCount + " times.");
+                if (clickCount > highScore) {
+                    highScore = clickCount;
+                    document.getElementById("highScore").innerText = "Best Score: " + highScore;
+                }
+            }, 5000);
+        }
+
+        function checkGuess() {
+            let userGuess = parseInt(document.getElementById("number-guess").value);
+            let result = document.getElementById("guess-result");
+            if (userGuess === Math.floor(Math.random() * 100) + 1) {
+                result.innerText = "Congratulations! You guessed it!";
+            } else {
+                result.innerText = "Try again!";
+            }
+        }
+
+        function playRPS(userChoice) {
+            const choices = ['rock', 'paper', 'scissors'];
+            const computerChoice = choices[Math.floor(Math.random() * 3)];
+            let result = "";
+            if (userChoice === computerChoice) {
+                result = "It's a tie!";
+            } else if (
+                (userChoice === 'rock' && computerChoice === 'scissors') || 
+                (userChoice === 'paper' && computerChoice === 'rock') || 
+                (userChoice === 'scissors' && computerChoice === 'paper')
+            ) {
+                result = "You win!";
+            } else {
+                result = "You lose!";
+            }
+            document.getElementById("rps-result").innerText = `You chose ${userChoice}, Computer chose ${computerChoice}. ${result}`;
+        }
+
+        function checkAnswer(answer) {
+            let result = document.getElementById("trivia-result");
+            if (answer === correctAnswer) {
+                result.innerText = "Correct!";
+            } else {
+                result.innerText = "Incorrect!";
+            }
+        }
+
+        function getChallenge() {
+            let challenge = challenges[Math.floor(Math.random() * challenges.length)];
+            document.getElementById("challenge-result").innerText = challenge;
         }
 
        
