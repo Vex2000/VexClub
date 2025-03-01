@@ -79,6 +79,9 @@
             padding: 20px;
             margin: 20px;
         }
+        #leaderboard-list {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -86,9 +89,6 @@
     <h1>Welcome to VexClub 🎉</h1>
 
     <div class="menu">
-        <div class="menu-item" onclick="showSection('random-fun')">
-            Random Fun 🎲
-        </div>
         <div class="menu-item" onclick="showSection('click-speed')">
             Click Speed ⚡
         </div>
@@ -101,12 +101,6 @@
         <div class="menu-item" onclick="showSection('leaderboard')">
             View Leaderboard 🏆
         </div>
-    </div>
-
-    <div id="random-fun" class="section">
-        <h2>Random Fun 🎲</h2>
-        <button onclick="generateRandomFun()" class="button">Get a Challenge</button>
-        <p id="randomResult"></p>
     </div>
 
     <div id="click-speed" class="section">
@@ -138,6 +132,18 @@
         <div id="leaderboard-list"></div>
     </div>
 
+    <div id="challenges-section" class="section">
+        <h2>Challenges 🎯</h2>
+        <button onclick="generateChallenge()" class="button">Get Challenge</button>
+        <p id="challengeResult"></p>
+    </div>
+
+    <div id="excuses-section" class="section">
+        <h2>Excuses 🤔</h2>
+        <button onclick="generateExcuse()" class="button">Get Excuse</button>
+        <p id="excuseResult"></p>
+    </div>
+
     <script>
         const challenges = [
             "Do 20 jumping jacks 💪", 
@@ -166,22 +172,6 @@
             let sections = document.querySelectorAll(".section");
             sections.forEach(section => section.classList.remove("active"));
             document.getElementById(sectionId).classList.add("active");
-        }
-
-        // Random Fun Game
-        function generateRandomFun() {
-            let challenge = challenges[Math.floor(Math.random() * challenges.length)];
-            let excuse = excuses[Math.floor(Math.random() * excuses.length)];
-            let randomType = Math.random();
-
-            // 5% chance of repeating the same challenge or excuse
-            if (randomType < 0.05) {
-                let repeated = Math.random() < 0.5 ? challenge : excuse;
-                document.getElementById("randomResult").innerText = `You got a repeat! ${repeated}`;
-            } else {
-                let selected = Math.random() < 0.5 ? challenge : excuse;
-                document.getElementById("randomResult").innerText = selected;
-            }
         }
 
         // Click Speed Game
@@ -216,6 +206,18 @@
             leaderboard.slice(0, 5).forEach((entry, index) => {
                 leaderboardList.innerHTML += `<p>Rank ${index + 1}: ${entry.score} clicks</p>`;
             });
+        }
+
+        // Challenge Game
+        function generateChallenge() {
+            let challenge = challenges[Math.floor(Math.random() * challenges.length)];
+            document.getElementById("challengeResult").innerText = challenge;
+        }
+
+        // Excuse Game
+        function generateExcuse() {
+            let excuse = excuses[Math.floor(Math.random() * excuses.length)];
+            document.getElementById("excuseResult").innerText = excuse;
         }
 
         // Guess the Number Game
