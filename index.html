@@ -39,7 +39,6 @@
             align-items: center;
             cursor: pointer;
             transition: all 0.3s ease-in-out;
-            position: relative;
         }
         .menu-item:hover {
             background-color: #e67e22;
@@ -54,7 +53,6 @@
             border-radius: 10px;
             background: #333;
             margin: 20px;
-            transition: all 0.3s ease-in-out;
         }
         .active {
             display: block;
@@ -71,41 +69,9 @@
         .button:hover {
             background-color: #e67e22;
         }
-        .fullscreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(0, 0, 0, 0.9);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 24px;
-            z-index: 1000;
-        }
-        .fullscreen.active {
-            display: flex;
-        }
         #score {
             font-size: 20px;
             margin-top: 20px;
-        }
-        .share-buttons {
-            margin-top: 20px;
-        }
-        .share-button {
-            margin: 0 10px;
-            padding: 10px;
-            background-color: #e67e22;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .share-button:hover {
-            background-color: #d35400;
         }
     </style>
 </head>
@@ -120,29 +86,11 @@
         <div class="menu-item" onclick="showSection('click-speed')">
             Click Speed ⚡
         </div>
-        <div class="menu-item" onclick="showSection('truth-lie')">
-            Truth or Lie 🕵️
-        </div>
-        <div class="menu-item" onclick="showSection('text-to-speech')">
-            Text to Speech 🔊
-        </div>
-        <div class="menu-item" onclick="showSection('fortune-teller')">
-            Fortune Teller 🔮
-        </div>
         <div class="menu-item" onclick="showSection('guess-number')">
             Guess the Number 🔢
         </div>
         <div class="menu-item" onclick="showSection('rock-paper-scissors')">
             Rock Paper Scissors ✊✋✌️
-        </div>
-        <div class="menu-item" onclick="showSection('trivia-quiz')">
-            Trivia Quiz 🧠
-        </div>
-        <div class="menu-item" onclick="showSection('challenges')">
-            Challenges 🎯
-        </div>
-        <div class="menu-item" onclick="showSection('excuses')">
-            Excuses 🤥
         </div>
     </div>
 
@@ -176,27 +124,6 @@
         <p id="rps-result"></p>
     </div>
 
-    <div id="trivia-quiz" class="section">
-        <h2>Trivia Quiz 🧠</h2>
-        <p>Which planet is known as the Red Planet?</p>
-        <button onclick="checkAnswer('Mars')" class="button">Mars</button>
-        <button onclick="checkAnswer('Earth')" class="button">Earth</button>
-        <button onclick="checkAnswer('Venus')" class="button">Venus</button>
-        <p id="trivia-result"></p>
-    </div>
-
-    <div id="challenges" class="section">
-        <h2>Challenges 🎯</h2>
-        <button onclick="getChallenge()" class="button">Get Challenge</button>
-        <p id="challenge-result"></p>
-    </div>
-
-    <div id="excuses" class="section">
-        <h2>Excuses 🤥</h2>
-        <button onclick="generateExcuse()" class="button">Generate Excuse</button>
-        <p id="excuse-result"></p>
-    </div>
-
     <script>
         const challenges = [
             "Do 20 jumping jacks 💪", 
@@ -205,39 +132,36 @@
             "Run around your house 3 times 🏃", 
             "Sing a song for 30 seconds 🎤"
         ];
-        const excuses = [
-            "Sorry, the internet was too slow 🐢", 
-            "I was thinking about something important 🧠", 
-            "I got stuck in work 🖥️", 
-            "My dog ate my homework 🐕", 
-            "I lost track of time ⏰"
-        ];
-        const correctAnswer = "Mars";
+        let clickCount = 0;
+        let highScore = 0;
 
+        // Show section based on menu click
         function showSection(sectionId) {
             let sections = document.querySelectorAll(".section");
             sections.forEach(section => section.classList.remove("active"));
             document.getElementById(sectionId).classList.add("active");
         }
 
+        // Random Fun Game
         function generateRandomFun() {
             let challenge = challenges[Math.floor(Math.random() * challenges.length)];
             document.getElementById("randomResult").innerText = challenge;
         }
 
+        // Click Speed Game
         function startClickTest() {
-            let clickCount = 0;
+            clickCount = 0;
             document.getElementById("clickCount").innerText = "Clicks: 0";
             let startTime = Date.now();
             let button = document.querySelector("#click-speed button");
-            button.onclick = () => {
+            button.onclick = function() {
                 if (Date.now() - startTime < 5000) {
                     clickCount++;
                     document.getElementById("clickCount").innerText = "Clicks: " + clickCount;
                 }
             };
-            setTimeout(() => {
-                button.onclick = null;
+            setTimeout(function() {
+                button.onclick = null; // Stop counting after 5 seconds
                 alert("Time's up! You clicked " + clickCount + " times.");
                 if (clickCount > highScore) {
                     highScore = clickCount;
@@ -246,16 +170,18 @@
             }, 5000);
         }
 
+        // Guess the Number Game
         function checkGuess() {
-            let userGuess = parseInt(document.getElementById("number-guess").value);
-            let result = document.getElementById("guess-result");
-            if (userGuess === Math.floor(Math.random() * 100) + 1) {
-                result.innerText = "Congratulations! You guessed it!";
+            const targetNumber = Math.floor(Math.random() * 100) + 1;
+            let userGuess = document.getElementById("number-guess").value;
+            if (parseInt(userGuess) === targetNumber) {
+                document.getElementById("guess-result").innerText = "Correct! The number was " + targetNumber;
             } else {
-                result.innerText = "Try again!";
+                document.getElementById("guess-result").innerText = "Incorrect! The number was " + targetNumber;
             }
         }
 
+        // Rock Paper Scissors Game
         function playRPS(userChoice) {
             const choices = ['rock', 'paper', 'scissors'];
             const computerChoice = choices[Math.floor(Math.random() * 3)];
@@ -273,19 +199,7 @@
             }
             document.getElementById("rps-result").innerText = `You chose ${userChoice}, Computer chose ${computerChoice}. ${result}`;
         }
+    </script>
 
-        function checkAnswer(answer) {
-            let result = document.getElementById("trivia-result");
-            if (answer === correctAnswer) {
-                result.innerText = "Correct!";
-            } else {
-                result.innerText = "Incorrect!";
-            }
-        }
-
-        function getChallenge() {
-            let challenge = challenges[Math.floor(Math.random() * challenges.length)];
-            document.getElementById("challenge-result").innerText = challenge;
-        }
-
-       
+</body>
+</html>
