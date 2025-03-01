@@ -22,38 +22,25 @@
         }
         .menu {
             display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: center;
             margin-top: 20px;
         }
         .menu-item {
             margin: 10px;
             padding: 20px;
-            width: 150px;
-            height: 150px;
+            width: 200px;
             background-color: #333;
             color: white;
-            font-size: 16px;
+            font-size: 18px;
             border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             cursor: pointer;
             transition: all 0.3s;
-            position: relative;
+            margin-bottom: 15px;
         }
         .menu-item:hover {
             background: #ffcc00;
             transform: scale(1.1);
-        }
-        .menu-item img {
-            max-width: 80%;
-            max-height: 80%;
-            margin-bottom: 10px;
-        }
-        .menu-item .label {
-            position: absolute;
-            bottom: 10px;
         }
         .section {
             display: none;
@@ -72,23 +59,6 @@
         }
         .light-theme h1 {
             background: #ffcc00;
-        }
-        .full-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 24px;
-        }
-        .full-screen.active {
-            display: flex;
         }
         .leaderboard {
             margin-top: 20px;
@@ -114,45 +84,32 @@
     <div class="menu">
         <!-- Random Fun -->
         <div class="menu-item" onclick="showSection('random-fun')">
-            <img src="https://via.placeholder.com/100?text=🎲" alt="Random Fun">
-            <div class="label">Random Fun</div>
+            Random Fun 🎲
         </div>
         <!-- Click Speed -->
         <div class="menu-item" onclick="showSection('click-speed')">
-            <img src="https://via.placeholder.com/100?text=⚡" alt="Click Speed">
-            <div class="label">Click Speed</div>
+            Click Speed ⚡
         </div>
         <!-- Truth or Lie -->
         <div class="menu-item" onclick="showSection('truth-lie')">
-            <img src="https://via.placeholder.com/100?text=🕵️" alt="Truth or Lie">
-            <div class="label">Truth or Lie?</div>
+            Truth or Lie? 🕵️
         </div>
         <!-- Text to Speech -->
         <div class="menu-item" onclick="showSection('text-to-speech')">
-            <img src="https://via.placeholder.com/100?text=🔊" alt="Text-to-Speech">
-            <div class="label">Text-to-Speech</div>
+            Text-to-Speech 🔊
         </div>
         <!-- Fortune Teller -->
         <div class="menu-item" onclick="showSection('fortune-teller')">
-            <img src="https://via.placeholder.com/100?text=🔮" alt="Fortune Teller">
-            <div class="label">Fortune Teller</div>
+            Fortune Teller 🔮
         </div>
         <!-- Excuse Generator -->
         <div class="menu-item" onclick="showSection('excuse-generator')">
-            <img src="https://via.placeholder.com/100?text=😂" alt="Excuse Generator">
-            <div class="label">Excuse Generator</div>
+            Excuse Generator 😂
         </div>
         <!-- New Game - Guess the Number -->
         <div class="menu-item" onclick="showSection('guess-the-number')">
-            <img src="https://via.placeholder.com/100?text=🔢" alt="Guess the Number">
-            <div class="label">Guess the Number</div>
+            Guess the Number 🔢
         </div>
-    </div>
-
-    <!-- Fullscreen Game View -->
-    <div id="fullScreen" class="full-screen">
-        <button onclick="closeFullScreen()">Close</button>
-        <div id="gameContent">Game goes here...</div>
     </div>
 
     <!-- Sections for the games -->
@@ -226,16 +183,6 @@
             let sections = document.querySelectorAll(".section");
             sections.forEach(section => section.classList.remove("active"));
             document.getElementById(sectionId).classList.add("active");
-        }
-
-        // Fullscreen game view
-        function openFullScreen(content) {
-            document.getElementById("gameContent").innerText = content;
-            document.getElementById("fullScreen").classList.add("active");
-        }
-
-        function closeFullScreen() {
-            document.getElementById("fullScreen").classList.remove("active");
         }
 
         // Random Fun Challenge
