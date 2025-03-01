@@ -82,6 +82,23 @@
         #leaderboard-list {
             margin-top: 10px;
         }
+        .chat-box {
+            margin-top: 20px;
+            width: 80%;
+            height: 200px;
+            background-color: #222;
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            overflow-y: auto;
+            font-size: 18px;
+        }
+        .user-message {
+            color: #f39c12;
+        }
+        .ai-message {
+            color: #e67e22;
+        }
     </style>
 </head>
 <body>
@@ -89,23 +106,20 @@
     <h1>Welcome to VexClub 🎉</h1>
 
     <div class="menu">
-        <div class="menu-item" onclick="showSection('click-speed')">
-            Click Speed ⚡
-        </div>
-        <div class="menu-item" onclick="showSection('guess-number')">
-            Guess the Number 🔢
-        </div>
-        <div class="menu-item" onclick="showSection('rock-paper-scissors')">
-            Rock Paper Scissors ✊✋✌️
-        </div>
-        <div class="menu-item" onclick="showSection('leaderboard')">
-            View Leaderboard 🏆
-        </div>
+        <div class="menu-item" onclick="showSection('click-speed')">Click Speed ⚡</div>
+        <div class="menu-item" onclick="showSection('guess-number')">Guess the Number 🔢</div>
+        <div class="menu-item" onclick="showSection('rock-paper-scissors')">Rock Paper Scissors ✊✋✌️</div>
+        <div class="menu-item" onclick="showSection('doctor-truth')">Doctor Truth 💬</div>
+        <div class="menu-item" onclick="showSection('challenges')">Challenges 🎯</div>
+        <div class="menu-item" onclick="showSection('excuses')">Excuses 🤔</div>
+        <div class="menu-item" onclick="showSection('quick-wit')">Quick Wit 🧠</div>
+        <div class="menu-item" onclick="showSection('general-knowledge')">General Knowledge 🧠</div>
+        <div class="menu-item" onclick="showSection('ai-chat')">Chat with AI 🤖</div>
+        <div class="menu-item" onclick="showSection('leaderboard')">View Leaderboard 🏆</div>
     </div>
 
     <div id="click-speed" class="section">
         <h2>Click Speed Test ⚡</h2>
-        <p>Click as fast as you can in 5 seconds!</p>
         <button onclick="startClickTest()" class="button">Start</button>
         <p id="clickCount">Clicks: 0</p>
         <p id="highScore">Best Score: 0</p>
@@ -113,7 +127,6 @@
 
     <div id="guess-number" class="section">
         <h2>Guess the Number 🔢</h2>
-        <p>Guess the number between 1 and 100!</p>
         <input type="number" id="number-guess" class="button" placeholder="Enter a number" />
         <button onclick="checkGuess()" class="button">Guess</button>
         <p id="guess-result"></p>
@@ -127,31 +140,62 @@
         <p id="rps-result"></p>
     </div>
 
-    <div id="leaderboard" class="section">
-        <h2>Leaderboard 🏆</h2>
-        <div id="leaderboard-list"></div>
+    <div id="doctor-truth" class="section">
+        <h2>Doctor Truth 💬</h2>
+        <p>Answer the question truthfully:</p>
+        <button onclick="askTruth()" class="button">Ask Question</button>
+        <p id="truth-result"></p>
     </div>
 
-    <div id="challenges-section" class="section">
+    <div id="challenges" class="section">
         <h2>Challenges 🎯</h2>
         <button onclick="generateChallenge()" class="button">Get Challenge</button>
         <p id="challengeResult"></p>
     </div>
 
-    <div id="excuses-section" class="section">
+    <div id="excuses" class="section">
         <h2>Excuses 🤔</h2>
         <button onclick="generateExcuse()" class="button">Get Excuse</button>
         <p id="excuseResult"></p>
     </div>
 
+    <div id="quick-wit" class="section">
+        <h2>Quick Wit 🧠</h2>
+        <button onclick="startQuickWit()" class="button">Start Quick Wit</button>
+        <p id="quick-wit-result"></p>
+    </div>
+
+    <div id="general-knowledge" class="section">
+        <h2>General Knowledge 🧠</h2>
+        <button onclick="startGeneralKnowledge()" class="button">Start Quiz</button>
+        <p id="general-knowledge-result"></p>
+    </div>
+
+    <div id="ai-chat" class="section">
+        <h2>Chat with AI 🤖</h2>
+        <div class="chat-box" id="chat-box"></div>
+        <input type="text" id="user-message" class="button" placeholder="Ask AI something..." />
+        <button onclick="sendMessage()" class="button">Send</button>
+    </div>
+
+    <div id="leaderboard" class="section">
+        <h2>Leaderboard 🏆</h2>
+        <div id="leaderboard-list"></div>
+    </div>
+
     <script>
+        let clickCount = 0;
+        let highScore = 0;
+        let leaderboard = [];
+        let currentQuestion = 0;
+        let userAnswers = [];
+
         const challenges = [
             "Do 20 jumping jacks 💪", 
             "Draw something with your eyes closed 👀", 
             "Write 10 short sentences about summer ☀️", 
             "Run around your house 3 times 🏃", 
-            "Sing a song for 30 seconds 🎤",
-            // More than 100 challenges can be added here...
+            "Sing a song for 30 seconds 🎤"
         ];
 
         const excuses = [
@@ -159,13 +203,20 @@
             "My pet was sick 🐶", 
             "The internet went down 🌐", 
             "I had a power outage ⚡", 
-            "I accidentally spilled coffee on my laptop ☕",
-            // More than 100 excuses can be added here...
+            "I accidentally spilled coffee on my laptop ☕"
         ];
 
-        let clickCount = 0;
-        let highScore = 0;
-        let leaderboard = [];
+        const triviaQuestions = [
+            { question: "What is the capital of France?", answer: "Paris" },
+            { question: "Who wrote 'Hamlet'?", answer: "Shakespeare" },
+            { question: "What is the largest ocean?", answer: "Pacific" }
+        ];
+
+        const aiResponses = [
+            "Hello! How can I help you today?",
+            "I'm here to assist you with anything!",
+            "Ask me anything and I will try my best to answer."
+        ];
 
         // Show section based on menu click
         function showSection(sectionId) {
@@ -208,6 +259,12 @@
             });
         }
 
+        // Truth Game
+        function askTruth() {
+            const truthQuestion = "What is your biggest fear?";
+            document.getElementById("truth-result").innerText = truthQuestion;
+        }
+
         // Challenge Game
         function generateChallenge() {
             let challenge = challenges[Math.floor(Math.random() * challenges.length)];
@@ -220,34 +277,33 @@
             document.getElementById("excuseResult").innerText = excuse;
         }
 
-        // Guess the Number Game
-        function checkGuess() {
-            const targetNumber = Math.floor(Math.random() * 100) + 1;
-            let userGuess = document.getElementById("number-guess").value;
-            if (parseInt(userGuess) === targetNumber) {
-                document.getElementById("guess-result").innerText = "Correct! The number was " + targetNumber;
-            } else {
-                document.getElementById("guess-result").innerText = "Incorrect! The number was " + targetNumber;
+        // Quick Wit Game
+        function startQuickWit() {
+            const response = Math.random() < 0.5 ? "You're quick!" : "Think faster!";
+            document.getElementById("quick-wit-result").innerText = response;
+        }
+
+        // General Knowledge Quiz
+        function startGeneralKnowledge() {
+            if (currentQuestion < triviaQuestions.length) {
+                const question = triviaQuestions[currentQuestion].question;
+                document.getElementById("general-knowledge-result").innerText = question;
             }
         }
 
-        // Rock Paper Scissors Game
-        function playRPS(userChoice) {
-            const choices = ['rock', 'paper', 'scissors'];
-            const computerChoice = choices[Math.floor(Math.random() * 3)];
-            let result = "";
-            if (userChoice === computerChoice) {
-                result = "It's a tie!";
-            } else if (
-                (userChoice === 'rock' && computerChoice === 'scissors') || 
-                (userChoice === 'paper' && computerChoice === 'rock') || 
-                (userChoice === 'scissors' && computerChoice === 'paper')
-            ) {
-                result = "You win!";
-            } else {
-                result = "You lose!";
-            }
-            document.getElementById("rps-result").innerText = `You chose ${userChoice}, Computer chose ${computerChoice}. ${result}`;
+        // AI Chat
+        function sendMessage() {
+            const userMessage = document.getElementById("user-message").value;
+            const chatBox = document.getElementById("chat-box");
+
+            // Display user message
+            chatBox.innerHTML += `<p class="user-message">${userMessage}</p>`;
+            const aiMessage = aiResponses[Math.floor(Math.random() * aiResponses.length)];
+
+            // Display AI response
+            chatBox.innerHTML += `<p class="ai-message">${aiMessage}</p>`;
+            document.getElementById("user-message").value = "";
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom
         }
     </script>
 
