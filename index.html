@@ -33,6 +33,7 @@
             color: white;
             font-size: 16px;
             border-radius: 5px;
+            transition: background 0.3s;
         }
         .menu button:hover {
             background: #3700b3;
@@ -43,11 +44,16 @@
             border-radius: 10px;
             background: #333;
             margin: 20px;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
         .active {
             display: block;
+            opacity: 1;
+            transform: scale(1);
         }
-        #randomResult {
+        #randomResult, #truthResult, #fortuneResult, #excuseResult {
             font-size: 20px;
             margin-top: 20px;
             font-weight: bold;
@@ -66,9 +72,9 @@
         <button onclick="showSection('text-to-speech')">🔊 Text-to-Speech</button>
         <button onclick="showSection('fortune-teller')">🔮 Fortune Teller</button>
         <button onclick="showSection('excuse-generator')">😂 Excuse Generator</button>
+        <button onclick="randomSection()">🎭 Random Feature</button>
     </div>
 
-    <!-- Random Fun Section -->
     <div id="random-fun" class="section">
         <h2>Random Fun 🎲</h2>
         <p>Click the button to get a random challenge!</p>
@@ -76,7 +82,6 @@
         <p id="randomResult"></p>
     </div>
 
-    <!-- Click Speed Section -->
     <div id="click-speed" class="section">
         <h2>Click Speed Test ⚡</h2>
         <p>Click as fast as you can in 5 seconds!</p>
@@ -84,7 +89,6 @@
         <p id="clickCount">Clicks: 0</p>
     </div>
 
-    <!-- Truth or Lie Detector -->
     <div id="truth-lie" class="section">
         <h2>Truth or Lie? 🕵️</h2>
         <p>Type something and we will detect if it's true or false (randomly)!</p>
@@ -93,7 +97,6 @@
         <p id="truthResult"></p>
     </div>
 
-    <!-- Text-to-Speech -->
     <div id="text-to-speech" class="section">
         <h2>Text-to-Speech 🔊</h2>
         <p>Type something and hear it out loud!</p>
@@ -101,7 +104,6 @@
         <button onclick="speakText()">Speak</button>
     </div>
 
-    <!-- Fortune Teller -->
     <div id="fortune-teller" class="section">
         <h2>Fortune Teller 🔮</h2>
         <p>Click the button to reveal your fortune!</p>
@@ -109,7 +111,6 @@
         <p id="fortuneResult"></p>
     </div>
 
-    <!-- Excuse Generator -->
     <div id="excuse-generator" class="section">
         <h2>Excuse Generator 😂</h2>
         <p>Need an excuse? Click below!</p>
@@ -118,6 +119,12 @@
     </div>
 
     <script>
+        let clickSound = new Audio('click.mp3'); // Replace with actual sound file
+
+        function playSound() {
+            clickSound.play();
+        }
+
         function showSection(sectionId) {
             let sections = document.querySelectorAll(".section");
             sections.forEach(section => section.classList.remove("active"));
@@ -126,7 +133,10 @@
 
         function generateRandomFun() {
             let challenges = ["Sing a song 🎤", "Do 10 push-ups 💪", "Dance for 30 seconds 💃", "Speak without using 'E' for 1 minute!"];
-            document.getElementById("randomResult").innerText = challenges[Math.floor(Math.random() * challenges.length)];
+            let result = challenges[Math.floor(Math.random() * challenges.length)];
+            document.getElementById("randomResult").innerText = result;
+            localStorage.setItem("randomFunResult", result);
+            playSound();
         }
 
         let clickCount = 0;
@@ -145,27 +155,43 @@
                 button.onclick = null;
                 alert("Time's up! You clicked " + clickCount + " times.");
             }, 5000);
+            playSound();
         }
 
         function checkTruth() {
             let responses = ["✅ True!", "❌ Lie detected!"];
-            document.getElementById("truthResult").innerText = responses[Math.floor(Math.random() * responses.length)];
+            let result = responses[Math.floor(Math.random() * responses.length)];
+            document.getElementById("truthResult").innerText = result;
+            localStorage.setItem("truthResult", result);
+            playSound();
         }
 
         function speakText() {
             let text = document.getElementById("speechInput").value;
             let speech = new SpeechSynthesisUtterance(text);
             window.speechSynthesis.speak(speech);
+            playSound();
         }
 
         function tellFortune() {
             let fortunes = ["Good luck awaits you!", "A surprise is coming your way!", "Be careful today!", "A great opportunity is near!"];
-            document.getElementById("fortuneResult").innerText = fortunes[Math.floor(Math.random() * fortunes.length)];
+            let result = fortunes[Math.floor(Math.random() * fortunes.length)];
+            document.getElementById("fortuneResult").innerText = result;
+            localStorage.setItem("fortuneResult", result);
+            playSound();
         }
 
         function generateExcuse() {
             let excuses = ["My dog ate my homework! 🐶", "I was saving the world! 🌍", "My alarm didn't go off! ⏰", "Aliens abducted me! 👽"];
-            document.getElementById("excuseResult").innerText = excuses[Math.floor(Math.random() * excuses.length)];
+            let result = excuses[Math.floor(Math.random() * excuses.length)];
+            document.getElementById("excuseResult").innerText = result;
+            localStorage.setItem("excuseResult", result);
+            playSound();
+        }
+
+        function randomSection() {
+            let sections = ["random-fun", "click-speed", "truth-lie", "text-to-speech", "fortune-teller", "excuse-generator"];
+            showSection(sections[Math.floor(Math.random() * sections.length)]);
         }
     </script>
 
