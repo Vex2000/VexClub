@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,18 +8,17 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #111;
-            color: #FFD700;
+            background-color: #000;
+            color: white;
             margin: 0;
             padding: 0;
         }
         h1 {
-            background-color: #FFD700;
+            background: #ffcc00;
             padding: 20px;
             margin: 0;
             font-size: 36px;
             color: black;
-            border-bottom: 3px solid black;
         }
         .menu {
             display: flex;
@@ -28,14 +27,14 @@
             margin-top: 20px;
         }
         .menu-item {
-            margin: 20px;
+            margin: 10px;
             padding: 20px;
-            width: 200px;
-            height: 200px;
-            background-color: #222;
+            width: 150px;
+            height: 150px;
+            background-color: #333;
             color: white;
-            font-size: 18px;
-            border-radius: 15px;
+            font-size: 16px;
+            border-radius: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -44,9 +43,8 @@
             position: relative;
         }
         .menu-item:hover {
-            background: #FFD700;
+            background: #ffcc00;
             transform: scale(1.1);
-            color: black;
         }
         .menu-item img {
             max-width: 80%;
@@ -68,6 +66,13 @@
         .active {
             display: block;
         }
+        .light-theme {
+            background-color: #f0f0f0;
+            color: black;
+        }
+        .light-theme h1 {
+            background: #ffcc00;
+        }
         .full-screen {
             position: fixed;
             top: 0;
@@ -79,25 +84,26 @@
             display: none;
             justify-content: center;
             align-items: center;
-            color: #FFD700;
+            color: white;
             font-size: 24px;
         }
         .full-screen.active {
             display: flex;
         }
-        button {
-            background-color: #FFD700;
-            color: black;
-            font-size: 18px;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: all 0.3s;
+        .leaderboard {
+            margin-top: 20px;
+            background: #222;
+            padding: 20px;
+            border-radius: 10px;
         }
-        button:hover {
-            background-color: #111;
-            color: #FFD700;
+        .leaderboard ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .leaderboard li {
+            padding: 5px;
+            font-size: 18px;
+            color: #ffcc00;
         }
     </style>
 </head>
@@ -108,33 +114,38 @@
     <div class="menu">
         <!-- Random Fun -->
         <div class="menu-item" onclick="showSection('random-fun')">
-            <img src="https://via.placeholder.com/150/FFD700/000000?text=🎲" alt="Random Fun">
+            <img src="https://via.placeholder.com/100?text=🎲" alt="Random Fun">
             <div class="label">Random Fun</div>
         </div>
         <!-- Click Speed -->
         <div class="menu-item" onclick="showSection('click-speed')">
-            <img src="https://via.placeholder.com/150/FFD700/000000?text=⚡" alt="Click Speed">
+            <img src="https://via.placeholder.com/100?text=⚡" alt="Click Speed">
             <div class="label">Click Speed</div>
         </div>
         <!-- Truth or Lie -->
         <div class="menu-item" onclick="showSection('truth-lie')">
-            <img src="https://via.placeholder.com/150/FFD700/000000?text=🕵️" alt="Truth or Lie">
+            <img src="https://via.placeholder.com/100?text=🕵️" alt="Truth or Lie">
             <div class="label">Truth or Lie?</div>
         </div>
-        <!-- Guess the Number -->
-        <div class="menu-item" onclick="showSection('guess-number')">
-            <img src="https://via.placeholder.com/150/FFD700/000000?text=🔢" alt="Guess the Number">
+        <!-- Text to Speech -->
+        <div class="menu-item" onclick="showSection('text-to-speech')">
+            <img src="https://via.placeholder.com/100?text=🔊" alt="Text-to-Speech">
+            <div class="label">Text-to-Speech</div>
+        </div>
+        <!-- Fortune Teller -->
+        <div class="menu-item" onclick="showSection('fortune-teller')">
+            <img src="https://via.placeholder.com/100?text=🔮" alt="Fortune Teller">
+            <div class="label">Fortune Teller</div>
+        </div>
+        <!-- Excuse Generator -->
+        <div class="menu-item" onclick="showSection('excuse-generator')">
+            <img src="https://via.placeholder.com/100?text=😂" alt="Excuse Generator">
+            <div class="label">Excuse Generator</div>
+        </div>
+        <!-- New Game - Guess the Number -->
+        <div class="menu-item" onclick="showSection('guess-the-number')">
+            <img src="https://via.placeholder.com/100?text=🔢" alt="Guess the Number">
             <div class="label">Guess the Number</div>
-        </div>
-        <!-- Memory Game -->
-        <div class="menu-item" onclick="showSection('memory-game')">
-            <img src="https://via.placeholder.com/150/FFD700/000000?text=🧠" alt="Memory Game">
-            <div class="label">Memory Game</div>
-        </div>
-        <!-- Math Quiz -->
-        <div class="menu-item" onclick="showSection('math-quiz')">
-            <img src="https://via.placeholder.com/150/FFD700/000000?text=➗" alt="Math Quiz">
-            <div class="label">Math Quiz</div>
         </div>
     </div>
 
@@ -144,14 +155,13 @@
         <div id="gameContent">Game goes here...</div>
     </div>
 
-    <!-- Random Fun Section -->
+    <!-- Sections for the games -->
     <div id="random-fun" class="section">
         <h2>Random Fun 🎲</h2>
         <button onclick="generateRandomFun()">Get a Challenge</button>
         <p id="randomResult"></p>
     </div>
 
-    <!-- Click Speed Section -->
     <div id="click-speed" class="section">
         <h2>Click Speed Test ⚡</h2>
         <p>Click as fast as you can in 5 seconds!</p>
@@ -160,38 +170,75 @@
         <p id="highScore">Best Score: 0</p>
     </div>
 
-    <!-- Guess the Number Section -->
-    <div id="guess-number" class="section">
+    <div id="truth-lie" class="section">
+        <h2>Truth or Lie? 🕵️</h2>
+        <button onclick="startTruthLieGame()">Start</button>
+        <p id="truthLieResult"></p>
+    </div>
+
+    <div id="text-to-speech" class="section">
+        <h2>Text-to-Speech 🔊</h2>
+        <input type="text" id="speechText" placeholder="Type something...">
+        <button onclick="convertTextToSpeech()">Speak</button>
+    </div>
+
+    <div id="fortune-teller" class="section">
+        <h2>Fortune Teller 🔮</h2>
+        <button onclick="tellFortune()">Tell Your Fortune</button>
+        <p id="fortuneResult"></p>
+    </div>
+
+    <div id="excuse-generator" class="section">
+        <h2>Excuse Generator 😂</h2>
+        <button onclick="generateExcuse()">Generate Excuse</button>
+        <p id="excuseResult"></p>
+    </div>
+
+    <!-- New Game - Guess the Number -->
+    <div id="guess-the-number" class="section">
         <h2>Guess the Number 🔢</h2>
-        <p>Guess a number between 1 and 10</p>
-        <input type="number" id="guessInput" min="1" max="10">
-        <button onclick="checkGuess()">Submit</button>
+        <p>Guess the number between 1 and 100:</p>
+        <input type="number" id="userGuess" placeholder="Enter your guess">
+        <button onclick="guessNumber()">Guess</button>
         <p id="guessResult"></p>
     </div>
 
-    <!-- Memory Game Section -->
-    <div id="memory-game" class="section">
-        <h2>Memory Game 🧠</h2>
-        <p>Match the cards to win!</p>
-        <button onclick="startMemoryGame()">Start Game</button>
-        <div id="memoryGameBoard"></div>
-    </div>
-
-    <!-- Math Quiz Section -->
-    <div id="math-quiz" class="section">
-        <h2>Math Quiz ➗</h2>
-        <p>Answer the question:</p>
-        <button onclick="startMathQuiz()">Start Quiz</button>
-        <div id="mathQuestion"></div>
-        <input type="number" id="mathAnswer">
-        <button onclick="checkMathAnswer()">Submit</button>
-        <p id="mathResult"></p>
+    <!-- Leaderboard -->
+    <div class="leaderboard">
+        <h3>Leaderboard</h3>
+        <ul id="leaderboardList">
+            <li>John Doe - 500 points</li>
+            <li>Jane Smith - 450 points</li>
+            <li>Mark Lee - 400 points</li>
+        </ul>
     </div>
 
     <script>
-        let highScore = 0;
+        // Variables for the leaderboard
+        let leaderboard = [
+            { name: "John Doe", score: 500 },
+            { name: "Jane Smith", score: 450 },
+            { name: "Mark Lee", score: 400 }
+        ];
 
-        // Random Fun
+        // Show section
+        function showSection(sectionId) {
+            let sections = document.querySelectorAll(".section");
+            sections.forEach(section => section.classList.remove("active"));
+            document.getElementById(sectionId).classList.add("active");
+        }
+
+        // Fullscreen game view
+        function openFullScreen(content) {
+            document.getElementById("gameContent").innerText = content;
+            document.getElementById("fullScreen").classList.add("active");
+        }
+
+        function closeFullScreen() {
+            document.getElementById("fullScreen").classList.remove("active");
+        }
+
+        // Random Fun Challenge
         function generateRandomFun() {
             let challenges = ["Sing a song 🎤", "Do 10 push-ups 💪", "Dance for 30 seconds 💃"];
             document.getElementById("randomResult").innerText = challenges[Math.floor(Math.random() * challenges.length)];
@@ -212,39 +259,61 @@
             setTimeout(() => {
                 button.onclick = null;
                 alert("Time's up! You clicked " + clickCount + " times.");
-                if (clickCount > highScore) {
-                    highScore = clickCount;
-                    document.getElementById("highScore").innerText = "Best Score: " + highScore;
+                if (clickCount > parseInt(localStorage.getItem('highScore') || 0)) {
+                    localStorage.setItem('highScore', clickCount);
+                    document.getElementById("highScore").innerText = "Best Score: " + clickCount;
                 }
             }, 5000);
         }
 
-        // Guess the Number
-        let targetNumber = Math.floor(Math.random() * 10) + 1;
-        function checkGuess() {
-            let guess = document.getElementById("guessInput").value;
-            if (guess == targetNumber) {
-                document.getElementById("guessResult").innerText = "Correct! You guessed the number!";
-            } else {
-                document.getElementById("guessResult").innerText = "Wrong! Try again.";
-            }
+        // Truth or Lie
+        function startTruthLieGame() {
+            let statements = [
+                { statement: "The Earth is flat.", isTrue: false },
+                { statement: "The sun rises in the east.", isTrue: true },
+                { statement: "Humans can breathe underwater.", isTrue: false }
+            ];
+            let randomStatement = statements[Math.floor(Math.random() * statements.length)];
+            let userAnswer = confirm(randomStatement.statement);
+            document.getElementById("truthLieResult").innerText = 
+                (userAnswer === randomStatement.isTrue) ? "Correct!" : "Wrong! Try again.";
         }
 
-        // Memory Game
-        function startMemoryGame() {
-            let cards = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-            cards = cards.concat(cards); // Duplicate for matching
-            cards = shuffle(cards);
-            let board = document.getElementById("memoryGameBoard");
-            board.innerHTML = '';
-            cards.forEach(card => {
-                let cardDiv = document.createElement('div');
-                cardDiv.classList.add('memory-card');
-                cardDiv.textContent = card;
-                cardDiv.style.width = '60px';
-                cardDiv.style.height = '60px';
-                cardDiv.style.display = 'inline-block';
-                cardDiv.style.margin = '10px';
-                cardDiv.style.textAlign = 'center';
-                cardDiv.style.lineHeight = '60px';
-                cardDiv.style.fontSize = '20px';
+        // Text-to-Speech
+        function convertTextToSpeech() {
+            let text = document.getElementById("speechText").value;
+            let utterance = new SpeechSynthesisUtterance(text);
+            speechSynthesis.speak(utterance);
+        }
+
+        // Fortune Teller
+        function tellFortune() {
+            let fortunes = [
+                "You will find happiness in unexpected places.",
+                "An exciting opportunity is coming your way.",
+                "Success is in your future, but hard work is required."
+            ];
+            document.getElementById("fortuneResult").innerText = fortunes[Math.floor(Math.random() * fortunes.length)];
+        }
+
+        // Excuse Generator
+        function generateExcuse() {
+            let excuses = [
+                "I missed the bus!",
+                "I wasn't feeling well.",
+                "I lost track of time."
+            ];
+            document.getElementById("excuseResult").innerText = excuses[Math.floor(Math.random() * excuses.length)];
+        }
+
+        // Guess the Number Game
+        function guessNumber() {
+            let userGuess = parseInt(document.getElementById("userGuess").value);
+            let correctNumber = Math.floor(Math.random() * 100) + 1;
+            let resultText = (userGuess === correctNumber) ? "Correct! You guessed the number." : "Wrong guess! Try again.";
+            document.getElementById("guessResult").innerText = resultText;
+        }
+    </script>
+
+</body>
+</html>
