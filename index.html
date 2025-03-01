@@ -146,6 +146,14 @@
         <div class="menu-item" onclick="showSection('trivia-quiz')">
             Trivia Quiz 🧠
         </div>
+        <!-- New Challenges -->
+        <div class="menu-item" onclick="showSection('challenges')">
+            Challenges 🎯
+        </div>
+        <!-- New Excuses -->
+        <div class="menu-item" onclick="showSection('excuses')">
+            Excuses 🤥
+        </div>
     </div>
 
     <!-- Fullscreen Game View -->
@@ -179,66 +187,63 @@
         <p id="guess-result"></p>
     </div>
 
-    <!-- Rock Paper Scissors Section -->
-    <div id="rock-paper-scissors" class="section">
-        <h2>Rock Paper Scissors ✊✋✌️</h2>
-        <button onclick="playRockPaperScissors('rock')" class="button">Rock ✊</button>
-        <button onclick="playRockPaperScissors('paper')" class="button">Paper ✋</button>
-        <button onclick="playRockPaperScissors('scissors')" class="button">Scissors ✌️</button>
-        <p id="rps-result"></p>
+    <!-- Challenges Section -->
+    <div id="challenges" class="section">
+        <h2>Challenges 🎯</h2>
+        <button onclick="getChallenge()" class="button">Get Challenge</button>
+        <p id="challenge-result"></p>
     </div>
 
-    <!-- Trivia Quiz Section -->
-    <div id="trivia-quiz" class="section">
-        <h2>Trivia Quiz 🧠</h2>
-        <button onclick="startTriviaQuiz()" class="button">Start Quiz</button>
-        <p id="trivia-question"></p>
-        <div id="trivia-options"></div>
-        <p id="trivia-result"></p>
-    </div>
-
-    <!-- Share Section -->
-    <div class="share-buttons">
-        <a href="#" class="share-button">Share on Facebook</a>
-        <a href="#" class="share-button">Share on Twitter</a>
+    <!-- Excuses Section -->
+    <div id="excuses" class="section">
+        <h2>Excuses 🤥</h2>
+        <button onclick="generateExcuse()" class="button">Generate Excuse</button>
+        <p id="excuse-result"></p>
     </div>
 
     <script>
-        let highScore = 0;
+        // List of challenges
+        const challenges = [
+            "Do 20 jumping jacks 💪", "Draw something with your eyes closed 👀", 
+            "Write 10 short sentences about summer ☀️", "Solve a simple math puzzle ➗", 
+            "Say 10 things you love about life 🌈", "Do 10 push-ups in a minute 🏋️", 
+            "Call your friend and share good news 📞", "Give a compliment to your friend in public 💬", 
+            "Dance for 30 seconds 💃", "Imitate an animal 🐶", 
+            // Add more challenges up to 100 here
+        ];
 
+        // List of excuses
+        const excuses = [
+            "Sorry, the internet was too slow 🐢", "I was thinking about something important 🧠", 
+            "I got stuck in work 🖥️", "My computer had an issue 😕", "I forgot, I'm really sorry 🙇‍♂️", 
+            "I'm feeling a bit sick today 🤒", "I had to finish something else first ⏳", 
+            "My battery died ⚡", "I was away from the phone 📵", 
+            // Add more excuses up to 100 here
+        ];
+
+        // Functions for Challenges
+        function getChallenge() {
+            const randomChallenge = challenges[Math.floor(Math.random() * challenges.length)];
+            document.getElementById("challenge-result").innerText = randomChallenge;
+        }
+
+        // Functions for Excuses
+        function generateExcuse() {
+            const randomExcuse = excuses[Math.floor(Math.random() * excuses.length)];
+            document.getElementById("excuse-result").innerText = randomExcuse;
+        }
+
+        // Show sections
         function showSection(sectionId) {
             let sections = document.querySelectorAll(".section");
             sections.forEach(section => section.classList.remove("active"));
             document.getElementById(sectionId).classList.add("active");
         }
 
-        function openFullScreen(content) {
-            document.getElementById("gameContent").innerText = content;
-            document.getElementById("fullScreen").classList.add("active");
-        }
-
         function closeFullScreen() {
             document.getElementById("fullScreen").classList.remove("active");
         }
+    </script>
 
-        // Random Fun
-        function generateRandomFun() {
-            let challenges = ["Sing a song 🎤", "Do 10 push-ups 💪", "Dance for 30 seconds 💃"];
-            document.getElementById("randomResult").innerText = challenges[Math.floor(Math.random() * challenges.length)];
-        }
-
-        // Click Speed
-        function startClickTest() {
-            let clickCount = 0;
-            document.getElementById("clickCount").innerText = "Clicks: 0";
-            let startTime = Date.now();
-            let button = document.querySelector("#click-speed button");
-            button.onclick = () => {
-                if (Date.now() - startTime < 5000) {
-                    clickCount++;
-                    document.getElementById("clickCount").innerText = "Clicks: " + clickCount;
-                }
-            };
-            setTimeout(() => {
-                button.onclick = null;
-                alert("Time's up! You clicked " + clickCount + "
+</body>
+</html>
